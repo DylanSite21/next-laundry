@@ -399,7 +399,10 @@ export default function Home() {
       {/* MAIN CONTENT */}
       <main className="main-content">
         <header className="top-bar">
-          <div className="mobile-menu-toggle" onClick={() => setSidebarOpen(true)}>
+          <div
+            className="mobile-menu-toggle"
+            onClick={() => setSidebarOpen(true)}
+          >
             <i className="fas fa-bars"></i>
           </div>
           <div className="user-info">
@@ -563,38 +566,38 @@ export default function Home() {
                           </td>
                         </tr>
                       ))}
-                      </tbody>
-                      </table>
-                      </div>
-                      </div>
-                      </section>
-                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          )}
 
-                      {/* LAYANAN */}
-                      {activePage === "layanan" && (
-                      <section id="layanan" className="page">
-                      <div className="page-header">
-                      <h1>Data Layanan</h1>
-                      <button
-                      className="btn-primary"
-                      onClick={() => openModal("layanan")}
-                      >
-                      <i className="fas fa-plus"></i> Tambah Layanan
-                      </button>
-                      </div>
+          {/* LAYANAN */}
+          {activePage === "layanan" && (
+            <section id="layanan" className="page">
+              <div className="page-header">
+                <h1>Data Layanan</h1>
+                <button
+                  className="btn-primary"
+                  onClick={() => openModal("layanan")}
+                >
+                  <i className="fas fa-plus"></i> Tambah Layanan
+                </button>
+              </div>
 
-                      <div className="card">
-                      <div className="table-responsive">
-                      <table>
-                      <thead>
+              <div className="card">
+                <div className="table-responsive">
+                  <table>
+                    <thead>
                       <tr>
                         <th>ID</th>
                         <th>Jenis Layanan</th>
                         <th>Harga / KG</th>
                         <th>Aksi</th>
                       </tr>
-                      </thead>
-                      <tbody>
+                    </thead>
+                    <tbody>
                       {layanan.map((item: any, idx: number) => (
                         <tr key={`l-${item.id_layanan}-${idx}`}>
                           <td data-label="ID">{item.id_layanan}</td>
@@ -622,31 +625,31 @@ export default function Home() {
                           </td>
                         </tr>
                       ))}
-                      </tbody>
-                      </table>
-                      </div>
-                      </div>
-                      </section>
-                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          )}
 
-                      {/* TRANSAKSI */}
-                      {activePage === "transaksi" && (
-                      <section id="transaksi" className="page">
-                      <div className="page-header">
-                      <h1>Data Transaksi</h1>
-                      <button
-                      className="btn-primary"
-                      onClick={() => openModal("transaksi")}
-                      >
-                      <i className="fas fa-plus"></i> Transaksi Baru
-                      </button>
-                      </div>
+          {/* TRANSAKSI */}
+          {activePage === "transaksi" && (
+            <section id="transaksi" className="page">
+              <div className="page-header">
+                <h1>Data Transaksi</h1>
+                <button
+                  className="btn-primary"
+                  onClick={() => openModal("transaksi")}
+                >
+                  <i className="fas fa-plus"></i> Transaksi Baru
+                </button>
+              </div>
 
-                      <div className="card">
-                      <div className="card-filters">
-                      <div className="search-box">
-                      <i className="fas fa-search"></i>
-                      <input
+              <div className="card">
+                <div className="card-filters">
+                  <div className="search-box">
+                    <i className="fas fa-search"></i>
+                    <input
                       type="text"
                       placeholder="Cari transaksi..."
                       value={searchTerms.transaksi}
@@ -656,12 +659,12 @@ export default function Home() {
                           transaksi: e.target.value,
                         })
                       }
-                      />
-                      </div>
-                      </div>
-                      <div className="table-responsive">
-                      <table>
-                      <thead>
+                    />
+                  </div>
+                </div>
+                <div className="table-responsive">
+                  <table>
+                    <thead>
                       <tr>
                         <th>ID</th>
                         <th>Pelanggan</th>
@@ -672,11 +675,11 @@ export default function Home() {
                         <th>Tanggal</th>
                         <th>Aksi</th>
                       </tr>
-                      </thead>
-                      <tbody>
+                    </thead>
+                    <tbody>
                       {filteredTransaksi.map((item: any, idx: number) => (
                         <tr key={`t-${item.id_transaksi}-${idx}`}>
-                          <td data-label="ID">#{item.id_transaksi}</td>
+                          <td data-label="ID">{item.id_transaksi}</td>
                           <td data-label="Pelanggan">
                             <strong>{item.nama}</strong>
                           </td>
@@ -717,30 +720,30 @@ export default function Home() {
                           </td>
                         </tr>
                       ))}
-                      </tbody>
-                      </table>
-                      </div>
-                      </div>
-                      </section>
-                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          )}
 
-                      {/* STOK */}
-                      {activePage === "stok" && (
-                      <section id="stok" className="page">
-                      <div className="page-header">
-                      <h1>Stok Barang</h1>
-                      <button
-                      className="btn-primary"
-                      onClick={() => openModal("stok")}
-                      >
-                      <i className="fas fa-plus"></i> Tambah Stok
-                      </button>
-                      </div>
+          {/* STOK */}
+          {activePage === "stok" && (
+            <section id="stok" className="page">
+              <div className="page-header">
+                <h1>Stok Barang</h1>
+                <button
+                  className="btn-primary"
+                  onClick={() => openModal("stok")}
+                >
+                  <i className="fas fa-plus"></i> Tambah Stok
+                </button>
+              </div>
 
-                      <div className="card">
-                      <div className="table-responsive">
-                      <table>
-                      <thead>
+              <div className="card">
+                <div className="table-responsive">
+                  <table>
+                    <thead>
                       <tr>
                         <th>ID</th>
                         <th>Nama Barang</th>
@@ -748,8 +751,8 @@ export default function Home() {
                         <th>Satuan</th>
                         <th>Aksi</th>
                       </tr>
-                      </thead>
-                      <tbody>
+                    </thead>
+                    <tbody>
                       {stok.map((item: any, idx: number) => (
                         <tr key={`s-${item.id_barang}-${idx}`}>
                           <td data-label="ID">{item.id_barang}</td>
@@ -774,30 +777,30 @@ export default function Home() {
                           </td>
                         </tr>
                       ))}
-                      </tbody>
-                      </table>
-                      </div>
-                      </div>
-                      </section>
-                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          )}
 
-                      {/* ANTAR */}
-                      {activePage === "antar" && (
-                      <section id="antar" className="page">
-                      <div className="page-header">
-                      <h1>Antar Jemput</h1>
-                      <button
-                      className="btn-primary"
-                      onClick={() => openModal("antar")}
-                      >
-                      <i className="fas fa-plus"></i> Tambah Antar
-                      </button>
-                      </div>
+          {/* ANTAR */}
+          {activePage === "antar" && (
+            <section id="antar" className="page">
+              <div className="page-header">
+                <h1>Antar Jemput</h1>
+                <button
+                  className="btn-primary"
+                  onClick={() => openModal("antar")}
+                >
+                  <i className="fas fa-plus"></i> Tambah Antar
+                </button>
+              </div>
 
-                      <div className="card">
-                      <div className="table-responsive">
-                      <table>
-                      <thead>
+              <div className="card">
+                <div className="table-responsive">
+                  <table>
+                    <thead>
                       <tr>
                         <th>ID</th>
                         <th>ID Transaksi</th>
@@ -806,12 +809,14 @@ export default function Home() {
                         <th>Status</th>
                         <th>Aksi</th>
                       </tr>
-                      </thead>
-                      <tbody>
+                    </thead>
+                    <tbody>
                       {antar.map((item: any, idx: number) => (
                         <tr key={`a-${item.id_antar}-${idx}`}>
                           <td data-label="ID">{item.id_antar}</td>
-                          <td data-label="ID Transaksi">#{item.id_transaksi}</td>
+                          <td data-label="ID Transaksi">
+                            #{item.id_transaksi}
+                          </td>
                           <td data-label="Alamat">{item.alamat_tujuan}</td>
                           <td data-label="Biaya">
                             Rp {item.biaya_antar.toLocaleString("id-ID")}
@@ -832,19 +837,21 @@ export default function Home() {
                             </button>
                             <button
                               className="btn-icon btn-danger"
-                              onClick={() => handleDelete("antar", item.id_antar)}
+                              onClick={() =>
+                                handleDelete("antar", item.id_antar)
+                              }
                             >
                               <i className="fas fa-trash"></i>
                             </button>
                           </td>
                         </tr>
                       ))}
-                      </tbody>
-                      </table>
-                      </div>
-                      </div>
-                      </section>
-                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          )}
 
           {/* LAPORAN */}
           {activePage === "laporan" && (
