@@ -91,7 +91,7 @@ export default function Home() {
       if (type === 'layanan') data = layanan.find((l) => l.id_layanan === id);
       if (type === 'transaksi') data = transaksi.find((t) => t.id_transaksi === id);
       if (type === 'stok') data = stok.find((s) => s.id_barang === id);
-      if (type === 'antar') data = antar.find((a) => a.id_antar_jemput === id);
+      if (type === 'antar') data = antar.find((a) => a.id_antar === id);
       setFormData(data || {});
     } else {
       setFormData({});
@@ -516,8 +516,8 @@ export default function Home() {
                     </thead>
                     <tbody>
                       {antar.map((item: any, idx: number) => (
-                        <tr key={`a-${item.id_antar_jemput}-${idx}`}>
-                          <td>{item.id_antar_jemput}</td>
+                        <tr key={`a-${item.id_antar}-${idx}`}>
+                          <td>{item.id_antar}</td>
                           <td>#{item.id_transaksi}</td>
                           <td>{item.alamat_tujuan}</td>
                           <td>Rp {item.biaya_antar.toLocaleString('id-ID')}</td>
@@ -527,10 +527,10 @@ export default function Home() {
                             </span>
                           </td>
                           <td>
-                            <button className="btn-icon btn-outline mr-2" onClick={() => openModal('antar', item.id_antar_jemput)}>
+                            <button className="btn-icon btn-outline mr-2" onClick={() => openModal('antar', item.id_antar)}>
                               <i className="fas fa-edit"></i>
                             </button>
-                            <button className="btn-icon btn-danger" onClick={() => handleDelete('antar', item.id_antar_jemput)}>
+                            <button className="btn-icon btn-danger" onClick={() => handleDelete('antar', item.id_antar)}>
                               <i className="fas fa-trash"></i>
                             </button>
                           </td>

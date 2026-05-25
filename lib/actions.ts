@@ -145,13 +145,13 @@ export async function addAntar(data: { id_transaksi: number, alamat_tujuan: stri
 }
 
 export async function updateAntar(id: number, data: { alamat_tujuan: string, biaya_antar: number, status_antar: string }) {
-  await db.query('UPDATE antar_jemput SET alamat_tujuan = ?, biaya_antar = ?, status_antar = ? WHERE id_antar_jemput = ?', 
+  await db.query('UPDATE antar_jemput SET alamat_tujuan = ?, biaya_antar = ?, status_antar = ? WHERE id_antar = ?', 
     [data.alamat_tujuan, data.biaya_antar, data.status_antar, id]);
   revalidatePath('/');
 }
 
 export async function deleteAntar(id: number) {
-  await db.query('DELETE FROM antar_jemput WHERE id_antar_jemput = ?', [id]);
+  await db.query('DELETE FROM antar_jemput WHERE id_antar = ?', [id]);
   revalidatePath('/');
 }
 
