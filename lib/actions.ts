@@ -2,6 +2,79 @@
 
 import db from './db';
 import { revalidatePath } from 'next/cache';
+import bcrypt from 'bcryptjs';
+import { cookies } from 'next/headers';
+import { SignJWT, jwtVerify } from 'jose';
+
+const secretKey = 'secret-next-laundry-key';
+const key = new TextEncoder().encode(secretKey);
+
+export async function encrypt(payload: any) {
+  return await new SignJWT(payload)
+    .setProtectedHeader({ alg: 'HS256' })
+    .setIssuedAt()
+    .setExpirationTime('2h')
+    .sign(key);
+}
+
+export async function decrypt(input: string): Promise<any> {
+  const { payload } = await jwtVerify(input, key, {
+    algorithms: ['HS256'],
+  });
+  return payload;
+}
+
+// ==================== AUTH ====================
+export async function register(data: any) {
+  const { username, email, password } = data;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  
+  try {
+    await db.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', 
+      [username, email, hashedPassword]);
+    return { success: true };
+  } catch (error: any) {
+    console.error('Registration error:', error);
+    if (error.code === 'ER_DUP_ENTRY') {
+      return { success: false, message: 'Username atau Email sudah terdaftar' };
+    }
+    return { success: false, message: 'Gagal mendaftar' };
+  }
+}
+
+export async function login(data: any) {
+  const { identifier, password } = data;
+  
+  const [rows]: any = await db.query('SELECT * FROM users WHERE username = ? OR email = ?', [identifier, identifier]);
+  const user = rows[0];
+
+  if (!user || !(await bcrypt.compare(password, user.password))) {
+    return { success: false, message: 'Username/Email atau Password salah' };
+  }
+
+  const expires = new Date(Date.now() + 2 * 60 * 60 * 1000); // 2 hours
+  const session = await encrypt({ id: user.id_user, username: user.username, email: user.email });
+
+  const cookieStore = await cookies();
+  cookieStore.set('session', session, { expires, httpOnly: true });
+  return { success: true };
+}
+
+export async function logout() {
+  const cookieStore = await cookies();
+  cookieStore.set('session', '', { expires: new Date(0) });
+}
+
+export async function getCurrentUser() {
+  const cookieStore = await cookies();
+  const session = cookieStore.get('session')?.value;
+  if (!session) return null;
+  try {
+    return await decrypt(session);
+  } catch (error) {
+    return null;
+  }
+}
 
 // ==================== DASHBOARD ====================
 export async function getDashboardData() {
