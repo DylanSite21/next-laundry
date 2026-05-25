@@ -15,6 +15,7 @@ export default function Home() {
   });
 
   const [activePage, setActivePage] = useState("dashboard");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [dashboardData, setDashboardData] = useState<any>(null);
   const [pelanggan, setPelanggan] = useState<any[]>([]);
   const [layanan, setLayanan] = useState<any[]>([]);
@@ -84,6 +85,11 @@ export default function Home() {
     await actions.logout();
     setUser(null);
     showToast("Logout berhasil");
+  };
+
+  const switchPage = (page: string) => {
+    setActivePage(page);
+    setSidebarOpen(false);
   };
 
   const loadData = async (page: string) => {
@@ -319,12 +325,16 @@ export default function Home() {
   }
 
   return (
-    <div className="app-container">
+    <div className={`app-container ${sidebarOpen ? "sidebar-open" : ""}`}>
       {/* SIDEBAR */}
       <aside className="sidebar">
         <div className="sidebar-header">
           <i className="fas fa-soap"></i>
           <span>CleanCloud</span>
+          <i
+            className="fas fa-times mobile-close"
+            onClick={() => setSidebarOpen(false)}
+          ></i>
         </div>
         <div className="sidebar-user px-6 mb-5 flex items-center gap-1">
           <p className="text-xs text-gray-500 uppercase font-bold">
@@ -336,43 +346,43 @@ export default function Home() {
           <ul>
             <li
               className={activePage === "dashboard" ? "active" : ""}
-              onClick={() => setActivePage("dashboard")}
+              onClick={() => switchPage("dashboard")}
             >
               <i className="fas fa-chart-line"></i> Dashboard
             </li>
             <li
               className={activePage === "pelanggan" ? "active" : ""}
-              onClick={() => setActivePage("pelanggan")}
+              onClick={() => switchPage("pelanggan")}
             >
               <i className="fas fa-users"></i> Pelanggan
             </li>
             <li
               className={activePage === "layanan" ? "active" : ""}
-              onClick={() => setActivePage("layanan")}
+              onClick={() => switchPage("layanan")}
             >
               <i className="fas fa-concierge-bell"></i> Layanan
             </li>
             <li
               className={activePage === "transaksi" ? "active" : ""}
-              onClick={() => setActivePage("transaksi")}
+              onClick={() => switchPage("transaksi")}
             >
               <i className="fas fa-exchange-alt"></i> Transaksi
             </li>
             <li
               className={activePage === "stok" ? "active" : ""}
-              onClick={() => setActivePage("stok")}
+              onClick={() => switchPage("stok")}
             >
               <i className="fas fa-boxes-stacked"></i> Stok Barang
             </li>
             <li
               className={activePage === "antar" ? "active" : ""}
-              onClick={() => setActivePage("antar")}
+              onClick={() => switchPage("antar")}
             >
               <i className="fas fa-truck"></i> Antar Jemput
             </li>
             <li
               className={activePage === "laporan" ? "active" : ""}
-              onClick={() => setActivePage("laporan")}
+              onClick={() => switchPage("laporan")}
             >
               <i className="fas fa-file-invoice-dollar"></i> Laporan
             </li>
@@ -389,6 +399,9 @@ export default function Home() {
       {/* MAIN CONTENT */}
       <main className="main-content">
         <header className="top-bar">
+          <div className="mobile-menu-toggle" onClick={() => setSidebarOpen(true)}>
+            <i className="fas fa-bars"></i>
+          </div>
           <div className="user-info">
             <span>{currentDate}</span>
           </div>
@@ -443,7 +456,7 @@ export default function Home() {
                   <h3 className="font-bold">Transaksi Terakhir</h3>
                   <button
                     className="btn-sm btn-outline"
-                    onClick={() => setActivePage("transaksi")}
+                    onClick={() => switchPage("transaksi")}
                   >
                     Lihat Semua
                   </button>
@@ -461,10 +474,12 @@ export default function Home() {
                     <tbody>
                       {dashboardData?.recent?.map((item: any, idx: number) => (
                         <tr key={`recent-${item.id_transaksi}-${idx}`}>
-                          <td>{item.nama}</td>
-                          <td>{item.jenis_layanan}</td>
-                          <td>Rp {item.total.toLocaleString("id-ID")}</td>
-                          <td>
+                          <td data-label="Pelanggan">{item.nama}</td>
+                          <td data-label="Layanan">{item.jenis_layanan}</td>
+                          <td data-label="Total">
+                            Rp {item.total.toLocaleString("id-ID")}
+                          </td>
+                          <td data-label="Status">
                             <span
                               className={`status ${item.status_pembayaran === "Lunas" ? "lunas" : "belum"}`}
                             >
@@ -524,11 +539,11 @@ export default function Home() {
                     <tbody>
                       {filteredPelanggan.map((item: any, idx: number) => (
                         <tr key={`p-${item.id_pelanggan}-${idx}`}>
-                          <td>{item.id_pelanggan}</td>
-                          <td>{item.nama}</td>
-                          <td>{item.alamat}</td>
-                          <td>{item.telepon}</td>
-                          <td>
+                          <td data-label="ID">{item.id_pelanggan}</td>
+                          <td data-label="Nama">{item.nama}</td>
+                          <td data-label="Alamat">{item.alamat}</td>
+                          <td data-label="Telepon">{item.telepon}</td>
+                          <td data-label="Aksi">
                             <button
                               className="btn-icon btn-outline mr-2"
                               onClick={() =>
@@ -548,46 +563,46 @@ export default function Home() {
                           </td>
                         </tr>
                       ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </section>
-          )}
+                      </tbody>
+                      </table>
+                      </div>
+                      </div>
+                      </section>
+                      )}
 
-          {/* LAYANAN */}
-          {activePage === "layanan" && (
-            <section id="layanan" className="page">
-              <div className="page-header">
-                <h1>Data Layanan</h1>
-                <button
-                  className="btn-primary"
-                  onClick={() => openModal("layanan")}
-                >
-                  <i className="fas fa-plus"></i> Tambah Layanan
-                </button>
-              </div>
+                      {/* LAYANAN */}
+                      {activePage === "layanan" && (
+                      <section id="layanan" className="page">
+                      <div className="page-header">
+                      <h1>Data Layanan</h1>
+                      <button
+                      className="btn-primary"
+                      onClick={() => openModal("layanan")}
+                      >
+                      <i className="fas fa-plus"></i> Tambah Layanan
+                      </button>
+                      </div>
 
-              <div className="card">
-                <div className="table-responsive">
-                  <table>
-                    <thead>
+                      <div className="card">
+                      <div className="table-responsive">
+                      <table>
+                      <thead>
                       <tr>
                         <th>ID</th>
                         <th>Jenis Layanan</th>
                         <th>Harga / KG</th>
                         <th>Aksi</th>
                       </tr>
-                    </thead>
-                    <tbody>
+                      </thead>
+                      <tbody>
                       {layanan.map((item: any, idx: number) => (
                         <tr key={`l-${item.id_layanan}-${idx}`}>
-                          <td>{item.id_layanan}</td>
-                          <td>{item.jenis_layanan}</td>
-                          <td>
+                          <td data-label="ID">{item.id_layanan}</td>
+                          <td data-label="Jenis">{item.jenis_layanan}</td>
+                          <td data-label="Harga">
                             Rp {item.harga_per_kg.toLocaleString("id-ID")}
                           </td>
-                          <td>
+                          <td data-label="Aksi">
                             <button
                               className="btn-icon btn-outline mr-2"
                               onClick={() =>
@@ -607,31 +622,31 @@ export default function Home() {
                           </td>
                         </tr>
                       ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </section>
-          )}
+                      </tbody>
+                      </table>
+                      </div>
+                      </div>
+                      </section>
+                      )}
 
-          {/* TRANSAKSI */}
-          {activePage === "transaksi" && (
-            <section id="transaksi" className="page">
-              <div className="page-header">
-                <h1>Data Transaksi</h1>
-                <button
-                  className="btn-primary"
-                  onClick={() => openModal("transaksi")}
-                >
-                  <i className="fas fa-plus"></i> Transaksi Baru
-                </button>
-              </div>
+                      {/* TRANSAKSI */}
+                      {activePage === "transaksi" && (
+                      <section id="transaksi" className="page">
+                      <div className="page-header">
+                      <h1>Data Transaksi</h1>
+                      <button
+                      className="btn-primary"
+                      onClick={() => openModal("transaksi")}
+                      >
+                      <i className="fas fa-plus"></i> Transaksi Baru
+                      </button>
+                      </div>
 
-              <div className="card">
-                <div className="card-filters">
-                  <div className="search-box">
-                    <i className="fas fa-search"></i>
-                    <input
+                      <div className="card">
+                      <div className="card-filters">
+                      <div className="search-box">
+                      <i className="fas fa-search"></i>
+                      <input
                       type="text"
                       placeholder="Cari transaksi..."
                       value={searchTerms.transaksi}
@@ -641,12 +656,12 @@ export default function Home() {
                           transaksi: e.target.value,
                         })
                       }
-                    />
-                  </div>
-                </div>
-                <div className="table-responsive">
-                  <table>
-                    <thead>
+                      />
+                      </div>
+                      </div>
+                      <div className="table-responsive">
+                      <table>
+                      <thead>
                       <tr>
                         <th>ID</th>
                         <th>Pelanggan</th>
@@ -657,30 +672,32 @@ export default function Home() {
                         <th>Tanggal</th>
                         <th>Aksi</th>
                       </tr>
-                    </thead>
-                    <tbody>
+                      </thead>
+                      <tbody>
                       {filteredTransaksi.map((item: any, idx: number) => (
                         <tr key={`t-${item.id_transaksi}-${idx}`}>
-                          <td>#{item.id_transaksi}</td>
-                          <td>
+                          <td data-label="ID">#{item.id_transaksi}</td>
+                          <td data-label="Pelanggan">
                             <strong>{item.nama}</strong>
                           </td>
-                          <td>{item.jenis_layanan}</td>
-                          <td>{item.berat} KG</td>
-                          <td>Rp {item.total.toLocaleString("id-ID")}</td>
-                          <td>
+                          <td data-label="Layanan">{item.jenis_layanan}</td>
+                          <td data-label="Berat">{item.berat} KG</td>
+                          <td data-label="Total">
+                            Rp {item.total.toLocaleString("id-ID")}
+                          </td>
+                          <td data-label="Status">
                             <span
                               className={`status ${item.status_pembayaran === "Lunas" ? "lunas" : "belum"}`}
                             >
                               {item.status_pembayaran}
                             </span>
                           </td>
-                          <td>
+                          <td data-label="Tanggal">
                             {new Date(item.tgl_masuk).toLocaleDateString(
                               "id-ID",
                             )}
                           </td>
-                          <td>
+                          <td data-label="Aksi">
                             <button
                               className="btn-icon btn-outline mr-2"
                               onClick={() =>
@@ -700,30 +717,30 @@ export default function Home() {
                           </td>
                         </tr>
                       ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </section>
-          )}
+                      </tbody>
+                      </table>
+                      </div>
+                      </div>
+                      </section>
+                      )}
 
-          {/* STOK */}
-          {activePage === "stok" && (
-            <section id="stok" className="page">
-              <div className="page-header">
-                <h1>Stok Barang</h1>
-                <button
-                  className="btn-primary"
-                  onClick={() => openModal("stok")}
-                >
-                  <i className="fas fa-plus"></i> Tambah Stok
-                </button>
-              </div>
+                      {/* STOK */}
+                      {activePage === "stok" && (
+                      <section id="stok" className="page">
+                      <div className="page-header">
+                      <h1>Stok Barang</h1>
+                      <button
+                      className="btn-primary"
+                      onClick={() => openModal("stok")}
+                      >
+                      <i className="fas fa-plus"></i> Tambah Stok
+                      </button>
+                      </div>
 
-              <div className="card">
-                <div className="table-responsive">
-                  <table>
-                    <thead>
+                      <div className="card">
+                      <div className="table-responsive">
+                      <table>
+                      <thead>
                       <tr>
                         <th>ID</th>
                         <th>Nama Barang</th>
@@ -731,15 +748,15 @@ export default function Home() {
                         <th>Satuan</th>
                         <th>Aksi</th>
                       </tr>
-                    </thead>
-                    <tbody>
+                      </thead>
+                      <tbody>
                       {stok.map((item: any, idx: number) => (
                         <tr key={`s-${item.id_barang}-${idx}`}>
-                          <td>{item.id_barang}</td>
-                          <td>{item.nama_barang}</td>
-                          <td>{item.jumlah}</td>
-                          <td>{item.satuan}</td>
-                          <td>
+                          <td data-label="ID">{item.id_barang}</td>
+                          <td data-label="Nama">{item.nama_barang}</td>
+                          <td data-label="Jumlah">{item.jumlah}</td>
+                          <td data-label="Satuan">{item.satuan}</td>
+                          <td data-label="Aksi">
                             <button
                               className="btn-icon btn-outline mr-2"
                               onClick={() => openModal("stok", item.id_barang)}
@@ -757,30 +774,30 @@ export default function Home() {
                           </td>
                         </tr>
                       ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </section>
-          )}
+                      </tbody>
+                      </table>
+                      </div>
+                      </div>
+                      </section>
+                      )}
 
-          {/* ANTAR */}
-          {activePage === "antar" && (
-            <section id="antar" className="page">
-              <div className="page-header">
-                <h1>Antar Jemput</h1>
-                <button
-                  className="btn-primary"
-                  onClick={() => openModal("antar")}
-                >
-                  <i className="fas fa-plus"></i> Tambah Antar
-                </button>
-              </div>
+                      {/* ANTAR */}
+                      {activePage === "antar" && (
+                      <section id="antar" className="page">
+                      <div className="page-header">
+                      <h1>Antar Jemput</h1>
+                      <button
+                      className="btn-primary"
+                      onClick={() => openModal("antar")}
+                      >
+                      <i className="fas fa-plus"></i> Tambah Antar
+                      </button>
+                      </div>
 
-              <div className="card">
-                <div className="table-responsive">
-                  <table>
-                    <thead>
+                      <div className="card">
+                      <div className="table-responsive">
+                      <table>
+                      <thead>
                       <tr>
                         <th>ID</th>
                         <th>ID Transaksi</th>
@@ -789,22 +806,24 @@ export default function Home() {
                         <th>Status</th>
                         <th>Aksi</th>
                       </tr>
-                    </thead>
-                    <tbody>
+                      </thead>
+                      <tbody>
                       {antar.map((item: any, idx: number) => (
                         <tr key={`a-${item.id_antar}-${idx}`}>
-                          <td>{item.id_antar}</td>
-                          <td>#{item.id_transaksi}</td>
-                          <td>{item.alamat_tujuan}</td>
-                          <td>Rp {item.biaya_antar.toLocaleString("id-ID")}</td>
-                          <td>
+                          <td data-label="ID">{item.id_antar}</td>
+                          <td data-label="ID Transaksi">#{item.id_transaksi}</td>
+                          <td data-label="Alamat">{item.alamat_tujuan}</td>
+                          <td data-label="Biaya">
+                            Rp {item.biaya_antar.toLocaleString("id-ID")}
+                          </td>
+                          <td data-label="Status">
                             <span
                               className={`status ${item.status_antar.toLowerCase()}`}
                             >
                               {item.status_antar}
                             </span>
                           </td>
-                          <td>
+                          <td data-label="Aksi">
                             <button
                               className="btn-icon btn-outline mr-2"
                               onClick={() => openModal("antar", item.id_antar)}
@@ -813,21 +832,19 @@ export default function Home() {
                             </button>
                             <button
                               className="btn-icon btn-danger"
-                              onClick={() =>
-                                handleDelete("antar", item.id_antar)
-                              }
+                              onClick={() => handleDelete("antar", item.id_antar)}
                             >
                               <i className="fas fa-trash"></i>
                             </button>
                           </td>
                         </tr>
                       ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </section>
-          )}
+                      </tbody>
+                      </table>
+                      </div>
+                      </div>
+                      </section>
+                      )}
 
           {/* LAPORAN */}
           {activePage === "laporan" && (
